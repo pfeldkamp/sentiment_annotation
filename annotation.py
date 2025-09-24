@@ -7,6 +7,7 @@ import os
 import gspread
 from google.oauth2.service_account import Credentials
 
+
 # -------------------------------
 # CONFIG
 
@@ -31,19 +32,12 @@ df['text'] = df['text'].astype(str)
 # -------------------------------
 # GOOGLE SHEETS AUTH
 # -------------------------------
-from google.oauth2.service_account import Credentials
-import gspread
 
-SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
-
-creds = Credentials.from_service_account_file(
-    SERVICE_ACCOUNT_FILE,
-    scopes=SCOPES
-)
-
-
+# Load service account from Streamlit secrets
+creds_dict = st.secrets["google_service_account"]
+creds = Credentials.from_service_account_info(dict(creds_dict), scopes=["https://www.googleapis.com/auth/spreadsheets"])
 gc = gspread.authorize(creds)
-#sheet = gc.open(SHEET_NAME)
+
 sheet_url = "https://docs.google.com/spreadsheets/d/1kcPj-cGEBaCp1dDZDEt0pNlqkhZFYN5EaWWY1r2-LLY/edit?usp=sharing"
 sheet = gc.open_by_url(sheet_url).sheet1
 
