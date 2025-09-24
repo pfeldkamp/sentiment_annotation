@@ -57,7 +57,7 @@ if "idx" not in st.session_state:
 # -------------------------------
 # SIDEBAR: USER INFO
 # -------------------------------
-st.sidebar.title("Annotator Info")
+st.sidebar.title("Deltager Info")
 st.session_state.username = st.sidebar.text_input(
     "Navn eller initialer:", st.session_state.username
 )
