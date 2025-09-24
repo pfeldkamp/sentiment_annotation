@@ -2,6 +2,8 @@
 
 # %%
 import streamlit as st
+st.write(st.secrets["google_service_account"].keys())
+
 import pandas as pd
 import os
 import gspread
