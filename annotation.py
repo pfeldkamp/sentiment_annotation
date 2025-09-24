@@ -76,6 +76,7 @@ if not st.session_state.started:
     Først: Indtast dit navn/initialer i sidebar og tryk "enter". \n
     Derefter vil du se sætninger.  
     Læs hver sætning og vurder følelsen fra 0 (meget negativ) til 10 (meget positiv).  \n
+    Prøv at lade være med at tænke for meget på konteksten - fokuser på den følelsesladning, der "ligger i" sætningen selv. \n
     Klik 'Start' når du er klar til at begynde.
     """)
     if st.button("Start"):
@@ -93,7 +94,7 @@ else:
 
         st.markdown(f"**Sætning {st.session_state.idx + 1} af {len(df)}**")
         st.markdown(f"<p style='font-size:24px'>{text}</p>", unsafe_allow_html=True)
-        st.write("Scor sætningen efter følelse, hvor: 0 = meget negativ // 5 = neutral // 10 = meget positiv")
+        st.write("Scor sætningen efter følelse: 0 = meget negativ // 5 = neutral // 10 = meget positiv")
         score = st.slider("Score:", 0.0, 10.0, 5.0, step=0.5)
 
         if st.button("Gem"):
