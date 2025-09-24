@@ -36,7 +36,7 @@ df['text'] = df['text'].astype(str)
 # -------------------------------
 
 # Load service account from Streamlit secrets
-creds_dict = st.secrets["google_service_account"].copy()
+creds_dict = st.secrets["google_service_account"]
 
 # Fix the private key formatting
 creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
