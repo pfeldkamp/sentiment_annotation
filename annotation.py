@@ -81,7 +81,7 @@ if st.sidebar.button("Gem alle annoteringer nu"):
             sheet.append_row(r)
         st.session_state.tmp = pd.DataFrame()
         st.session_state.start_time = time.time()  # reset timer
-        st.sidebar.markdown("Alle dine annoteringer er gemt i Google Sheets ✅")
+        st.sidebar.markdown("Alle gemt ✅")
     else:
         st.info("Der er ingen annoteringer i buffer at gemme.")
 
@@ -148,8 +148,8 @@ else:
                 # check elapsed time
                 elapsed_time = time.time() - st.session_state.start_time
                 if elapsed_time > 120:  # flush to Google Sheets every 2 min
-                    for r in st.session_state.tmp.values.tolist():
-                        sheet.append_row(r)
+                    #for r in st.session_state.tmp.values.tolist():
+                    sheet.append_rows(st.session_state.tmp.values.tolist())
                     st.session_state.tmp = pd.DataFrame()  # reset buffer
                     st.session_state.start_time = time.time()  # reset timer
 
