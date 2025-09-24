@@ -73,7 +73,7 @@ if not st.session_state.started:
     st.title("Velkommen til annotering!")
     st.markdown("""
     **Instruktioner:**  
-    Først: Indtast dit navn/initialer i sidebar og tryk "enter". \n
+    Først: Indtast dit navn/initialer i sidebaren til venstre og tryk "enter". \n
     Derefter vil du se sætninger.  
     Læs hver sætning og vurder følelsen fra 0 (meget negativ) til 10 (meget positiv).  \n
     Prøv at lade være med at tænke for meget på konteksten - fokuser på den følelsesladning, der "ligger i" sætningen selv. \n
