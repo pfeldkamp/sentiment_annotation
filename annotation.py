@@ -263,7 +263,7 @@ if not st.session_state.started:
     """)
     if st.button("Start"):
         st.session_state.started = True
-        st.experimental_rerun()
+        st.rerun()
 else:
     # -------------------------------
     # MAIN ANNOTATION AREA
@@ -305,4 +305,4 @@ else:
                     st.session_state.start_time = time.time()
 
                 st.session_state.idx += 1
-                st.experimental_rerun()
+                st.rerun()
