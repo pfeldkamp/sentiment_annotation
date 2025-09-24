@@ -35,9 +35,12 @@ df['text'] = df['text'].astype(str)
 
 # Load service account from Streamlit secrets
 creds_dict = st.secrets["google_service_account"]
-creds = Credentials.from_service_account_info(dict(creds_dict), scopes=["https://www.googleapis.com/auth/spreadsheets"])
-gc = gspread.authorize(creds)
 
+creds = Credentials.from_service_account_info(
+    creds_dict,
+    scopes=["https://www.googleapis.com/auth/spreadsheets"]
+)
+gc = gspread.authorize(creds)
 sheet_url = "https://docs.google.com/spreadsheets/d/1kcPj-cGEBaCp1dDZDEt0pNlqkhZFYN5EaWWY1r2-LLY/edit?usp=sharing"
 sheet = gc.open_by_url(sheet_url).sheet1
 
