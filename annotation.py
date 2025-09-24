@@ -73,9 +73,9 @@ if st.session_state.username.strip():
 # MANUAL FLUSH BUTTON
 # -------------------------------
 st.sidebar.markdown("---")
-st.sidebar.write("💾 Hvis du vil sikre, at alle dine annoteringer er gemt, kan du trykke på knappen nedenfor:")
+st.sidebar.write("💾 Hvis du vil gemme alle dine annoteringer nu, kan du trykke på knappen nedenfor:")
 
-if st.sidebar.button("Flush Buffer til Google Sheets"):
+if st.sidebar.button("Gem alle annoteringer nu"):
     if not st.session_state.tmp.empty:
         for r in st.session_state.tmp.values.tolist():
             sheet.append_row(r)
