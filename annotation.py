@@ -86,13 +86,16 @@ if not st.session_state.started:
         st.rerun()
 else:
     # -------------------------------
-    # MAIN ANNOTATION AREA
-    # -------------------------------
+# MAIN ANNOTATION AREA
+# -------------------------------
     if st.session_state.idx >= len(df):
         st.success("🎉 Alle sætninger er annoterede. Tak for hjælpen!")
     else:
-        # start timer
-        start_time = time.time()
+        # init timer and tmp in session_state
+        if "start_time" not in st.session_state:
+            st.session_state.start_time = time.time()
+        if "tmp" not in st.session_state:
+            st.session_state.tmp = pd.DataFrame()
 
         row = df.iloc[st.session_state.idx]
         text_id, text = f"{row['feuilleton_id']}_{row.name}", row["text"]
@@ -100,9 +103,7 @@ else:
         st.markdown(f"**Sætning {st.session_state.idx + 1} af {len(df)}**")
         st.markdown(f"<p style='font-size:24px'>{text}</p>", unsafe_allow_html=True)
         st.write("Scor sætningen efter følelse: 0 = meget negativ // 5 = neutral // 10 = meget positiv")
-        score = st.slider("Score:", 0.0, 10.0, 5.0, step=0.5)
-
-        # reset slider to 5.0 when user changes text
+        score = st.slider("Score:", 0.0, 10.0, 5.0, step=0.5, key=f"slider_{st.session_state.idx}")
 
         if st.button("Gem"):
             if st.session_state.username.strip() == "":
@@ -114,18 +115,16 @@ else:
                     "text": text,
                     "sentiment_score": score
                 }])
-                tmp.append(new_row, ignore_index=True)
+                st.session_state.tmp = pd.concat([st.session_state.tmp, new_row], ignore_index=True)
 
-                # if timer > 120 seconds, send to Google Sheets
-                elapsed_time = time.time() - start_time
-                if elapsed_time > 120:
-                    #sheet.append_row([st.session_state.username, text_id, text, score])
-                    sheet.append_rows(tmp.values.tolist())
-                    # reset df
-                    tmp = pd.DataFrame()
-                    start_time = time.time()  # reset timer
-                #new_row.to_csv(ANNOT_FILE, mode="a", header=False, index=False)
-                #sheet.append_row([st.session_state.username, text_id, text, score])
+                # check elapsed time
+                elapsed_time = time.time() - st.session_state.start_time
+                if elapsed_time > 120:  # flush to Google Sheets every 2 min
+                    for r in st.session_state.tmp.values.tolist():
+                        sheet.append_row(r)
+                    st.session_state.tmp = pd.DataFrame()  # reset buffer
+                    st.session_state.start_time = time.time()  # reset timer
+
                 st.success("Gemt!")
                 st.session_state.idx += 1
                 st.rerun()
