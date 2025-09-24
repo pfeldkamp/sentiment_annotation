@@ -62,52 +62,102 @@ st.session_state.username = st.sidebar.text_input(
     "Navn eller initialer:", st.session_state.username
 )
 
+
 # -------------------------------
-# MAIN ANNOTATION AREA
+# START PAGE
 # -------------------------------
-if st.session_state.idx >= len(df):
-    st.success("🎉 Alle sætninger er annoterede. Tak for hjælpen!")
+if "started" not in st.session_state:
+    st.session_state.started = False
+
+if not st.session_state.started:
+    st.title("Velkommen til annotering!")
+    st.markdown("""
+    **Instruktioner:**  
+    Først: Indtast dit navn/initialer i sidebar og tryk "enter".
+    Derefter vil du se sætninger.  
+    Læs sætningen og vurder følelsen fra 0 (meget negativ) til 10 (meget positiv).  \n
+    Klik 'Start' når du er klar til at begynde.
+    """)
+    if st.button("Start"):
+        st.session_state.started = True
+        st.rerun()
 else:
-    # Current sentence
-    row = df.iloc[st.session_state.idx]
-    text_id, text = f"{row['feuilleton_id']}_{row.name}", row["text"]
+    # -------------------------------
+    # MAIN ANNOTATION AREA
+    # -------------------------------
+    if st.session_state.idx >= len(df):
+        st.success("🎉 Alle sætninger er annoterede. Tak for hjælpen!")
+    else:
+        row = df.iloc[st.session_state.idx]
+        text_id, text = f"{row['feuilleton_id']}_{row.name}", row["text"]
 
-    # Progress
-    st.markdown(f"**Sætning {st.session_state.idx + 1} af {len(df)}**")
+        st.markdown(f"**Sætning {st.session_state.idx + 1} af {len(df)}**")
+        st.markdown(f"<p style='font-size:24px'>{text}</p>", unsafe_allow_html=True)
+        st.write("Scor sætningen efter følelse, hvor: 0 = meget negativ // 5 = neutral // 10 = meget positiv")
+        score = st.slider("Score:", 0.0, 10.0, 5.0, step=0.5)
 
-    # Big text display
-    st.markdown(f"<p style='font-size:24px'>{text}</p>", unsafe_allow_html=True)
+        if st.button("Gem"):
+            if st.session_state.username.strip() == "":
+                st.error("⚠️ Indtast venligst dit navn eller initialer i sidebar før du gemmer.")
+            else:
+                new_row = pd.DataFrame([{
+                    "annotator": st.session_state.username,
+                    "text_id": text_id,
+                    "text": text,
+                    "sentiment_score": score
+                }])
+                new_row.to_csv(ANNOT_FILE, mode="a", header=False, index=False)
+                sheet.append_row([st.session_state.username, text_id, text, score])
+                st.success("Gemt!")
+                st.session_state.idx += 1
+                st.rerun()
 
-    # Instructions
-    st.write("Scor sætningen efter følelse, hvor: 0 = meget negativ // 5 = neutral // 10 = meget positiv")
+# # -------------------------------
+# # MAIN ANNOTATION AREA
+# # -------------------------------
+# if st.session_state.idx >= len(df):
+#     st.success("🎉 Alle sætninger er annoterede. Tak for hjælpen!")
+# else:
+#     # Current sentence
+#     row = df.iloc[st.session_state.idx]
+#     text_id, text = f"{row['feuilleton_id']}_{row.name}", row["text"]
 
-    # Decimal slider
-    score = st.slider("Score:", 0.0, 10.0, 5.0, step=0.5)
+#     # Progress
+#     st.markdown(f"**Sætning {st.session_state.idx + 1} af {len(df)}**")
 
-    # Submit button
-    if st.button("Gem"):
-        if st.session_state.username.strip() == "":
-            st.error("⚠️ Indtast venligst dit navn eller initialer i sidebar før du gemmer.")
-        else:
-            # Save locally
-            new_row = pd.DataFrame([{
-                "annotator": st.session_state.username,
-                "text_id": text_id,
-                "text": text,
-                "sentiment_score": score
-            }])
-            new_row.to_csv(ANNOT_FILE, mode="a", header=False, index=False)
+#     # Big text display
+#     st.markdown(f"<p style='font-size:24px'>{text}</p>", unsafe_allow_html=True)
 
-            # Save to Google Sheets
-            sheet.append_row([
-                st.session_state.username,
-                text_id,
-                text,
-                score
-            ])
+#     # Instructions
+#     st.write("Scor sætningen efter følelse, hvor: 0 = meget negativ // 5 = neutral // 10 = meget positiv")
 
-            st.success("Gemt!")
+#     # Decimal slider
+#     score = st.slider("Score:", 0.0, 10.0, 5.0, step=0.5)
 
-            # Move to next sentence
-            st.session_state.idx += 1
-            st.rerun()
+#     # Submit button
+#     if st.button("Gem"):
+#         if st.session_state.username.strip() == "":
+#             st.error("⚠️ Indtast venligst dit navn eller initialer i sidebar før du gemmer.")
+#         else:
+#             # Save locally
+#             new_row = pd.DataFrame([{
+#                 "annotator": st.session_state.username,
+#                 "text_id": text_id,
+#                 "text": text,
+#                 "sentiment_score": score
+#             }])
+#             new_row.to_csv(ANNOT_FILE, mode="a", header=False, index=False)
+
+#             # Save to Google Sheets
+#             sheet.append_row([
+#                 st.session_state.username,
+#                 text_id,
+#                 text,
+#                 score
+#             ])
+
+#             st.success("Gemt!")
+
+#             # Move to next sentence
+#             st.session_state.idx += 1
+#             st.rerun()
