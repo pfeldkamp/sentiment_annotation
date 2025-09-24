@@ -81,7 +81,7 @@ if st.sidebar.button("Gem alle annoteringer nu"):
             sheet.append_row(r)
         st.session_state.tmp = pd.DataFrame()
         st.session_state.start_time = time.time()  # reset timer
-        st.success("Alle dine annoteringer er gemt i Google Sheets ✅")
+        st.sidebar.markdown("Alle dine annoteringer er gemt i Google Sheets ✅")
     else:
         st.info("Der er ingen annoteringer i buffer at gemme.")
 
