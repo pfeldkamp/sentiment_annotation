@@ -73,9 +73,9 @@ if not st.session_state.started:
     st.title("Velkommen til annotering!")
     st.markdown("""
     **Instruktioner:**  
-    Først: Indtast dit navn/initialer i sidebar og tryk "enter".
+    Først: Indtast dit navn/initialer i sidebar og tryk "enter". \n
     Derefter vil du se sætninger.  
-    Læs sætningen og vurder følelsen fra 0 (meget negativ) til 10 (meget positiv).  \n
+    Læs hver sætning og vurder følelsen fra 0 (meget negativ) til 10 (meget positiv).  \n
     Klik 'Start' når du er klar til at begynde.
     """)
     if st.button("Start"):
