@@ -27,7 +27,7 @@ if not os.path.exists(ANNOT_FILE):
 # LOAD SENTENCES
 # -------------------------------
 # If CSV, read directly
-df = pd.read_csv(DATA_FILE, header=None, names=["text"])
+df = pd.read_csv(DATA_FILE, header=None, names=["text", "feuilleton_id"])
 df['text'] = df['text'].astype(str)
 
 # -------------------------------
@@ -70,7 +70,7 @@ if st.session_state.idx >= len(df):
 else:
     # Current sentence
     row = df.iloc[st.session_state.idx]
-    text_id, text = row.name, row["text"]
+    text_id, text = f"{row['feuilleton_id']}_{row.name}", row["text"]
 
     # Progress
     st.markdown(f"**Sætning {st.session_state.idx + 1} af {len(df)}**")
