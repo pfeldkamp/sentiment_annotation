@@ -39,14 +39,16 @@ df['text'] = df['text'].astype(str)
 # creds_dict = st.secrets["google_service_account"]
 
 # Fix the private key formatting
+# # creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
+# creds_dict = dict(st.secrets["google_service_account"])  # make a mutable copy
 # creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
-creds_dict = dict(st.secrets["google_service_account"])  # make a mutable copy
-creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
 
+creds_dict = dict(st.secrets["google_service_account"])
 creds = Credentials.from_service_account_info(
     creds_dict,
     scopes=["https://www.googleapis.com/auth/spreadsheets"]
 )
+
 gc = gspread.authorize(creds)
 sheet_url = "https://docs.google.com/spreadsheets/d/1kcPj-cGEBaCp1dDZDEt0pNlqkhZFYN5EaWWY1r2-LLY/edit?usp=sharing"
 sheet = gc.open_by_url(sheet_url).sheet1
