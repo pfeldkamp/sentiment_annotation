@@ -113,8 +113,8 @@ else:
 
         # save leftover annotations if any
         if not st.session_state.tmp.empty:
-            for r in st.session_state.tmp.values.tolist():
-                sheet.append_row(r)
+            #for r in st.session_state.tmp.values.tolist():
+            sheet.append_rows(st.session_state.tmp.values.tolist())
             st.session_state.tmp = pd.DataFrame()
             st.info("Alle dine annoteringer er gemt i Google Sheets ✅")
                         
