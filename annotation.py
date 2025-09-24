@@ -66,7 +66,7 @@ st.session_state.username = st.sidebar.text_input(
 
 if st.session_state.username.strip():
     st.sidebar.markdown(
-        "<div style='background-color:#d4edda; padding:5px; border-radius:5px;'>✅ Initialer registreret</div>",
+        "<div style='background-color:#d4edda; padding:5px; border-radius:5px;'>✅</div>",
         unsafe_allow_html=True
     )
 # -------------------------------
