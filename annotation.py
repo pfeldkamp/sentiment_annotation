@@ -64,6 +64,26 @@ st.session_state.username = st.sidebar.text_input(
     "Navn eller initialer:", st.session_state.username
 )
 
+if st.session_state.username.strip():
+    st.sidebar.markdown(
+        "<div style='background-color:#d4edda; padding:5px; border-radius:5px;'>✅ Initialer registreret</div>",
+        unsafe_allow_html=True
+    )
+# -------------------------------
+# MANUAL FLUSH BUTTON
+# -------------------------------
+st.sidebar.markdown("---")
+st.sidebar.write("💾 Hvis du vil sikre, at alle dine annoteringer er gemt, kan du trykke på knappen nedenfor:")
+
+if st.sidebar.button("Flush Buffer til Google Sheets"):
+    if not st.session_state.tmp.empty:
+        for r in st.session_state.tmp.values.tolist():
+            sheet.append_row(r)
+        st.session_state.tmp = pd.DataFrame()
+        st.session_state.start_time = time.time()  # reset timer
+        st.success("Alle dine annoteringer er gemt i Google Sheets ✅")
+    else:
+        st.info("Der er ingen annoteringer i buffer at gemme.")
 
 # -------------------------------
 # START PAGE
@@ -95,9 +115,9 @@ else:
         if not st.session_state.tmp.empty:
             for r in st.session_state.tmp.values.tolist():
                 sheet.append_row(r)
-            st.session_state.tmp = pd.DataFrame()  # reset
+            st.session_state.tmp = pd.DataFrame()
             st.info("Alle dine annoteringer er gemt i Google Sheets ✅")
-            
+                        
     else:
         # init timer and tmp in session_state
         if "start_time" not in st.session_state:
