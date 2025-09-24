@@ -45,7 +45,7 @@ gc = gspread.authorize(creds)
 sheet_url = "https://docs.google.com/spreadsheets/d/1kcPj-cGEBaCp1dDZDEt0pNlqkhZFYN5EaWWY1r2-LLY/edit?usp=sharing"
 sheet = gc.open_by_url(sheet_url).sheet1
 
-df = pd.DataFrame()
+tmp = pd.DataFrame()
 
 # -------------------------------
 # STREAMLIT SESSION STATE
@@ -114,12 +114,15 @@ else:
                     "text": text,
                     "sentiment_score": score
                 }])
-                df.append(new_row, ignore_index=True)
+                tmp.append(new_row, ignore_index=True)
 
                 # if timer > 120 seconds, send to Google Sheets
                 elapsed_time = time.time() - start_time
                 if elapsed_time > 120:
-                    sheet.append_row([st.session_state.username, text_id, text, score])
+                    #sheet.append_row([st.session_state.username, text_id, text, score])
+                    sheet.append_rows(tmp.values.tolist())
+                    # reset df
+                    tmp = pd.DataFrame()
                     start_time = time.time()  # reset timer
                 #new_row.to_csv(ANNOT_FILE, mode="a", header=False, index=False)
                 #sheet.append_row([st.session_state.username, text_id, text, score])
