@@ -79,10 +79,7 @@ else:
     st.markdown(f"<p style='font-size:24px'>{text}</p>", unsafe_allow_html=True)
 
     # Instructions
-    st.write("Scor sætningen efter følelse, hvor:")
-    st.write("0 = meget negativ")
-    st.write("5 = neutral")
-    st.write("10 = meget positiv")
+    st.write("Scor sætningen efter følelse, hvor: 0 = meget negativ // 5 = neutral // 10 = meget positiv")
 
     # Decimal slider
     score = st.slider("Score:", 0.0, 10.0, 5.0, step=0.5)
