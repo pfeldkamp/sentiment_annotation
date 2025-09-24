@@ -59,7 +59,7 @@ if "idx" not in st.session_state:
 # -------------------------------
 st.sidebar.title("Annotator Info")
 st.session_state.username = st.sidebar.text_input(
-    "Dit navn eller initialer:", st.session_state.username
+    "Navn eller initialer:", st.session_state.username
 )
 
 # -------------------------------
@@ -79,16 +79,16 @@ else:
     st.markdown(f"<p style='font-size:24px'>{text}</p>", unsafe_allow_html=True)
 
     # Instructions
-    st.write("Scor sætningen efter følelse:")
+    st.write("Scor sætningen efter følelse, hvor:")
     st.write("0 = meget negativ")
     st.write("5 = neutral")
     st.write("10 = meget positiv")
 
     # Decimal slider
-    score = st.slider("Score:", 0.0, 10.0, 5.0, step=0.1)
+    score = st.slider("Score:", 0.0, 10.0, 5.0, step=0.5)
 
     # Submit button
-    if st.button("Enter"):
+    if st.button("Gem"):
         if st.session_state.username.strip() == "":
             st.error("⚠️ Indtast venligst dit navn eller initialer i sidebar før du gemmer.")
         else:
