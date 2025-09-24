@@ -89,14 +89,14 @@ else:
 # MAIN ANNOTATION AREA
 # -------------------------------
     if st.session_state.idx >= len(df):
-        st.success("🎉 Alle sætninger er annoterede. Tak for hjælpen!")
+        st.success(f"🎉 Alle sætninger er annoterede. Tak for hjælpen, {st.session_state.username.strip()}!")
 
         # save leftover annotations if any
         if not st.session_state.tmp.empty:
             for r in st.session_state.tmp.values.tolist():
                 sheet.append_row(r)
             st.session_state.tmp = pd.DataFrame()  # reset
-            st.info("Alle dine annoteringer er nu gemt i Google Sheets ✅")
+            st.info("Alle dine annoteringer er gemt i Google Sheets ✅")
             
     else:
         # init timer and tmp in session_state
